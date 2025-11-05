@@ -1118,11 +1118,15 @@ body {
 .gallery img {
   width: 100%;
   height: 350px;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
   transition: transform 0.3s ease, opacity 0.3s ease;
   border-radius: 4px;
   display: block;
+}
+
+.gallery-img-2 {
+  object-position: 50% 50%;
 }
 
 .gallery img:hover {
@@ -1618,6 +1622,7 @@ footer li a:hover {
     width: calc(100% - 200px);
     float: right;
     margin-left: 80px;
+    margin-top: 160px;
     padding: 1.75rem 2rem;
   }
 
@@ -1626,7 +1631,7 @@ footer li a:hover {
     border-right-width: 12px;
     left: -12px;
     right: auto;
-    top: 60px;
+    top: 220px;
   }
 
   .timeline li .timeline-panel::after {
@@ -1634,7 +1639,7 @@ footer li a:hover {
     border-right-width: 11px;
     left: -11px;
     right: auto;
-    top: 61px;
+    top: 221px;
   }
 
   .simply-countdown > .simply-section {

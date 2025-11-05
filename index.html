@@ -37,8 +37,8 @@
         </div>
         <!-- Buttons container at the bottom -->
         <div class="hero-buttons">
-          <a href="#home" class="btn btn-lg" onClick="enableScroll()">See Invitation</a>
-          <a href="#rsvp" class="btn btn-lg btn-rsvp" onClick="enableScroll()">RSVP</a>
+          <a href="#home" class="btn btn-lg">See Invitation</a>
+          <a href="#rsvp" class="btn btn-lg btn-rsvp">RSVP</a>
         </div>
       </main>
     </section>
@@ -245,7 +245,7 @@
           <!-- Repeat for each gallery item, changing the image source, caption, and lightbox attributes -->
           <div class="col mt-3">
             <a href="img/2.png" data-toggle="lightbox" data-caption="2" data-gallery="mygallery">
-              <img src="img/2.png" alt="2" class="img-fluid w-100 rounded" />
+              <img src="img/2.png" alt="2" class="img-fluid w-100 rounded gallery-img-2" />
             </a>
           </div>
           <div class="col mt-3">
@@ -546,9 +546,8 @@
       // Initialize audio icon state (play icon visible)
       isPlaying = false;
 
-      // Try to enable scrolling and play audio when user clicks "See Invitation"
-      // Modern browsers require user interaction to play audio, so autoplay may not work
-      disableScroll(); // Initially disable scrolling
+      // Enable scrolling from the beginning
+      rootElement.style.scrollBehavior = "smooth";
       
       // Set volume when audio loads
       song.addEventListener('loadeddata', function() {
