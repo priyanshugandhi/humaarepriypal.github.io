@@ -440,44 +440,22 @@
 
     <!-- Solve problem when the website change to mobile screen for NavBar -->
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        // Select elements with the class "sticky-top" and "offcanvas"
-        const stickyTop = document.querySelector(".sticky-top");
-        const offcanvas = document.querySelector("#offcanvasNavbar");
-        const navLinks = document.querySelectorAll("#offcanvasNavbar .nav-link");
-        
-        if (offcanvas) {
-          // Event listener for when the offcanvas is shown
-          offcanvas.addEventListener("show.bs.offcanvas", function () {
-            // Change the overflow style of the sticky-top element to 'visible'
-            if (stickyTop) {
-              stickyTop.style.overflow = "visible";
-            }
-          });
+      // Select elements with the class "sticky-top" and "offcanvas"
+      const stickyTop = document.querySelector(".sticky-top");
+      const offcanvas = document.querySelector(".offcanvas");
 
-          // Event listener for when the offcanvas is hidden
-          offcanvas.addEventListener("hidden.bs.offcanvas", function () {
-            // Change the overflow style of the sticky-top element to 'hidden'
-            if (stickyTop) {
-              stickyTop.style.overflow = "hidden";
-            }
-          });
+      // Event listener for when the offcanvas is shown
+      offcanvas.addEventListener("show.bs.offcanvas", function () {
+        // Change the overflow style of the sticky-top element to 'visible'
+        // This allows the sticky-top content to be fully displayed without being clipped
+        stickyTop.style.overflow = "visible";
+      });
 
-          // Close offcanvas when nav links are clicked (important for mobile UX)
-          navLinks.forEach(function(link) {
-            link.addEventListener('click', function() {
-              // Close the offcanvas after a short delay to allow navigation
-              setTimeout(function() {
-                if (typeof bootstrap !== 'undefined' && bootstrap.Offcanvas) {
-                  const offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvas);
-                  if (offcanvasInstance) {
-                    offcanvasInstance.hide();
-                  }
-                }
-              }, 300);
-            });
-          });
-        }
+      // Event listener for when the offcanvas is hidden
+      offcanvas.addEventListener("hidden.bs.offcanvas", function () {
+        // Change the overflow style of the sticky-top element to 'hidden'
+        // This prevents the content from overflowing when the offcanvas is hidden
+        stickyTop.style.overflow = "hidden";
       });
     </script>
 
@@ -490,55 +468,61 @@
       const song = document.querySelector("#song");
       let isPlaying = false; // Variable to track whether the audio is playing or not
 
-      // Function to disable scrolling (improved for Android)
+      let scrollLocked = true;
+
+      // Function to disable scrolling - works on Android
       function disableScroll() {
         scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+        scrollLocked = true;
 
-        // Add styles to prevent scrolling on body and html
+        // Fix body position for mobile
         document.body.style.overflow = 'hidden';
         document.body.style.position = 'fixed';
         document.body.style.top = `-${scrollTop}px`;
+        document.body.style.left = '0';
+        document.body.style.right = '0';
         document.body.style.width = '100%';
         document.documentElement.style.overflow = 'hidden';
-
-        // Prevent scrolling by locking the scroll position (fallback)
-        window.onscroll = function () {
-          window.scrollTo(scrollTop, scrollLeft);
-        };
 
         // Set the scroll behavior to 'auto' to prevent smooth scrolling during the lock
         rootElement.style.scrollBehavior = "auto";
 
-        // Prevent touch move on mobile devices
-        document.addEventListener('touchmove', preventScroll, { passive: false });
-        document.addEventListener('wheel', preventScroll, { passive: false });
+        // Prevent touch scrolling on mobile
+        document.addEventListener('touchmove', preventTouchScroll, { passive: false });
+        document.addEventListener('touchstart', preventTouchScroll, { passive: false });
       }
 
-      // Function to prevent scroll events
-      function preventScroll(e) {
-        e.preventDefault();
+      // Prevent touch scroll
+      function preventTouchScroll(e) {
+        if (scrollLocked && e.target.closest('.offcanvas') === null) {
+          e.preventDefault();
+          e.stopPropagation();
+          return false;
+        }
       }
 
       // Function to enable scrolling
       function enableScroll() {
-        // Remove fixed positioning and restore scroll position
+        scrollLocked = false;
+        
+        // Restore scroll position
         const scrollY = document.body.style.top;
         document.body.style.overflow = '';
         document.body.style.position = '';
         document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
         document.body.style.width = '';
         document.documentElement.style.overflow = '';
         
-        // Restore scroll position
         window.scrollTo(0, parseInt(scrollY || '0') * -1);
-
-        window.onscroll = function () {}; // Unlock scrolling
+        
         rootElement.style.scrollBehavior = "smooth"; // Re-enable smooth scrolling
         
-        // Remove touch move prevention
-        document.removeEventListener('touchmove', preventScroll);
-        document.removeEventListener('wheel', preventScroll);
+        // Remove touch prevention
+        document.removeEventListener('touchmove', preventTouchScroll);
+        document.removeEventListener('touchstart', preventTouchScroll);
         
         playAudio(); // Start playing the audio when scrolling is enabled
       }
