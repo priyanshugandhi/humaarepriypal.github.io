@@ -37,7 +37,7 @@
         </div>
         <!-- Buttons container at the bottom -->
         <div class="hero-buttons">
-          <a href="#home" class="btn btn-lg">See Invitation</a>
+          <a href="#home" class="btn btn-lg" onClick="enableScroll()">See Invitation <i class="bi bi-chevron-down ms-2"></i></a>
           <a href="#rsvp" class="btn btn-lg btn-rsvp">RSVP</a>
         </div>
       </main>
@@ -546,8 +546,8 @@
       // Initialize audio icon state (play icon visible)
       isPlaying = false;
 
-      // Enable scrolling from the beginning
-      rootElement.style.scrollBehavior = "smooth";
+      // Initially disable scrolling until user clicks "See Invitation"
+      disableScroll();
       
       // Set volume when audio loads
       song.addEventListener('loadeddata', function() {

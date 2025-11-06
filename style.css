@@ -206,6 +206,8 @@ body {
 .mynavbar .offcanvas {
   height: 100vh;
   background-color: var(--cream);
+  --bs-offcanvas-width: 85vw;
+  max-width: 85vw;
 }
 
 .mynavbar .offcanvas-header {
@@ -1707,7 +1709,7 @@ footer li a:hover {
   }
 
   .sticky-top {
-    overflow: hidden;
+    overflow: visible;
   }
 
   .timeline li .timeline-image {
@@ -1834,5 +1836,9 @@ footer li a:hover {
 
   .simply-countdown > .simply-section .simply-amount {
     font-size: 1.5rem;
+  }
+
+  .sticky-top {
+    overflow: visible;
   }
 }
